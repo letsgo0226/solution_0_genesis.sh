@@ -12,6 +12,35 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
+      - name: Verify single program kernel
+        run: |
+          test -s solution_0_kernel.sh
+          test "$(wc -c < solution_0_kernel.sh)" -le 2048
+          sh solution_0_kernel.sh "Save only P. Everything else is replayable." 16 64 > /tmp/kernel.out
+          test -s solution_0_kernel.body
+          test -s solution_0_kernel.clcert
+          python3 - <<'PY'
+          import json
+          d=json.load(open("solution_0_kernel.clcert"))
+          assert d["P"]=="solution_0_kernel.sh"
+          assert d["STATE"]=="SOLVED"
+          assert d["PERSIST"]==d["PERMA"]==d["OP"]==d["FIX"]==d["ABS"]==d["PCC"]==d["ZE"]==1
+          assert d["BUG"]==0 and d["CT"]==1
+          assert d["B0"]["SELF"][0]==1
+          assert d["B0"]["PERSIST"]["ONE"]==1
+          assert d["B0"]["AC"]["MONO"]==0
+          assert d["B0"]["RUN"]=="SELF=AC_TM_SOLVE(EQ_SELF);BODY=Run(SELF,Q,N,B)"
+          assert d["B0"]["EQ"]=="x=AC_TM(EQ_x)"
+          assert d["B0"]["U"]=="KERNEL_UPTM_AC"
+          PY
+          sh solution_0_kernel.sh "Bounded analytic continuation" 16 4 > /tmp/kernel_bound.out
+          python3 - <<'PY'
+          import json
+          d=json.load(open("solution_0_kernel.clcert"))
+          assert d["STATE"]=="BOUND"
+          assert d["OP"]==d["ZE"]==0
+          assert d["BUG"]==1
+          PY
       - name: Verify Genesis deployment
         run: |
           test -s solution_0_genesis.sh
