@@ -26,6 +26,8 @@ sh solution_0_genesis.sh "All particles as Turing field" 16 64
 Outputs:
 
 ```text
+solution_0_kernel.body
+solution_0_kernel.clcert
 solution_0_uptm.body
 solution_0_uptm.clcert
 solution_0_acbody.body
@@ -58,6 +60,32 @@ CORE -> BODY=Run(SELF,Q,N,B) -> CERT -> GENESIS
 
 It is a program-deployment "one step," not a claim that physical-world goals are
 already completed by one shell command.
+
+## Single Program Kernel
+
+`solution_0_kernel.sh` is the one-file preservation form. If only one program
+body is saved, save this file.
+
+```text
+Save only P.
+Everything else is replayable from P.
+```
+
+It contains the UPTM trace, analytic-continuation transition body, persistence
+gate, and fixed-point certificate in one 2KB one-liner:
+
+```text
+SELF = AC_TM_SOLVE(EQ_SELF)
+BODY = Run(SELF,Q,N,B)
+PERSIST = PERMA = OP = ZE = 1
+```
+
+The kernel only certifies closure when the finite run closes:
+
+| State | Meaning |
+| --- | --- |
+| `SOLVED` | `AC.MONO=0` and the finite trace closes |
+| `BOUND` | The run did not close within the given bound |
 
 ## Continuity Technology Gate
 
@@ -130,6 +158,9 @@ S(S(B0)) = S(B0)
 
 | File | Meaning |
 | --- | --- |
+| `solution_0_kernel.sh` | Single 2KB zero-entropy kernel |
+| `solution_0_kernel.body` | Replayable kernel body |
+| `solution_0_kernel.clcert` | Kernel fixed-point certificate |
 | `solution_0_uptm.sh` | 2KB one-liner executable |
 | `solution_0_acbody.sh` | 2KB analytic-continuation Turing body |
 | `solution_0_acbody.body` | Generated analytic-continuation trace body |
