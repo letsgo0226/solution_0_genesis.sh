@@ -37,6 +37,7 @@ Expected fields:
 
 ```text
 GENESIS=1
+CT=1
 OP=1
 FIX=1
 BUG=0
@@ -55,6 +56,29 @@ CORE -> BODY=Run(SELF,Q,N,B) -> CERT -> GENESIS
 
 It is a program-deployment "one step," not a claim that physical-world goals are
 already completed by one shell command.
+
+## Continuity Technology Gate
+
+`CT` is an operational gate, not just a label:
+
+```text
+CT = min(AI, BIO, MEM, HEALTH, SDG, UNK)
+GENESIS = OP = ZE = CORE_OK and UPTM_OK and CT and FIX
+```
+
+The current implementation uses formal runtime proxies:
+
+| Module | Runtime condition |
+| --- | --- |
+| `AI` | UPTM computation verifies `OP/FIX/ZE` |
+| `BIO` | A non-empty body field is generated |
+| `MEM` | Genesis self bytes are present |
+| `HEALTH` | UPTM reports `BUG=0` |
+| `SDG` | UPTM reports `PCC=1` |
+| `UNK` | Future modules remain admissible |
+
+These are computable admission conditions for the Continuity Technology frame,
+not biological or policy proof that those domains are physically solved.
 
 `solution_0_uptm.sh` is a 2KB one-liner for a Universal Particle Turing Machine
 (UPTM) style `Solution_0` certificate.
