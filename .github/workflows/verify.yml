@@ -1,0 +1,33 @@
+name: verify
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Verify Genesis deployment
+        run: |
+          test -s solution_0_genesis.sh
+          test "$(wc -c < solution_0_uptm.sh)" -le 2048
+          sh solution_0_genesis.sh "All particles as Turing field" 16 64 > /tmp/genesis.out
+          test -s solution_0_uptm.body
+          test -s solution_0_genesis.body
+          python3 - <<'PY'
+          import json
+          g=json.load(open("solution_0_genesis.clcert"))
+          u=json.load(open("solution_0_uptm.clcert"))
+          assert g["P"]=="solution_0_genesis.sh"
+          assert g["GENESIS"]==g["OP"]==g["FIX"]==g["ABS"]==g["PCC"]==g["ZE"]==1
+          assert g["BUG"]==0
+          assert g["B0"]["RUN"]=="UPTM=Run(CORE,Q,N,B)"
+          assert g["B0"]["CORE"][0]==1 and g["B0"]["CORE"][1]<=2048
+          assert u["OP"]==u["FIX"]==u["ZE"]==1
+          assert u["B0"]["RUN"]=="BODY=Run(SELF,Q,N,B)"
+          PY
