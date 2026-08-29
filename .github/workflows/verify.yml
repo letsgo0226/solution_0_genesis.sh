@@ -41,6 +41,43 @@ jobs:
           assert d["OP"]==d["ZE"]==0
           assert d["BUG"]==1
           PY
+      - name: Verify Reality_sys logic
+        run: |
+          test -s solution_0_reality.sh
+          test "$(wc -c < solution_0_reality.sh)" -le 2048
+          sh solution_0_reality.sh "All bubbles as Reality_sys" 16 64 > /tmp/reality.out
+          test -s solution_0_reality.body
+          test -s solution_0_reality.clcert
+          python3 - <<'PY'
+          import json
+          d=json.load(open("solution_0_reality.clcert"))
+          assert d["P"]=="solution_0_reality.sh"
+          assert d["STATE"]=="SOLVED"
+          assert d["CONSISTENT"]==d["COMPLETE"]==1
+          assert d["ALLBUBBLES"]==d["REALITY_SYS"]==d["OP"]==d["FIX"]==d["ABS"]==d["PCC"]==d["ZE"]==1
+          assert d["BUG"]==0
+          assert d["B0"]["LOGIC"]["CONSISTENT"]==d["B0"]["LOGIC"]["COMPLETE"]==1
+          assert d["B0"]["AC"]["MONO"]==0
+          assert d["B0"]["RUN"]=="Reality_sys=Fix(ACBody(TrueTree(Exist(SELF))))"
+          PY
+          sh solution_0_reality.sh "Bounded reality system" 16 4 > /tmp/reality_bound.out
+          python3 - <<'PY'
+          import json
+          d=json.load(open("solution_0_reality.clcert"))
+          assert d["STATE"]=="BOUND"
+          assert d["COMPLETE"]==1
+          assert d["OP"]==d["ZE"]==d["REALITY_SYS"]==0
+          assert d["BUG"]==1
+          PY
+          sh solution_0_reality.sh "contra branch" 16 64 > /tmp/reality_contra.out
+          python3 - <<'PY'
+          import json
+          d=json.load(open("solution_0_reality.clcert"))
+          assert d["STATE"]=="CONTRA"
+          assert d["COMPLETE"]==1
+          assert d["OP"]==d["ZE"]==d["REALITY_SYS"]==0
+          assert d["BUG"]==1
+          PY
       - name: Verify Genesis deployment
         run: |
           test -s solution_0_genesis.sh
