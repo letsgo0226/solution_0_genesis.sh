@@ -28,6 +28,8 @@ Outputs:
 ```text
 solution_0_kernel.body
 solution_0_kernel.clcert
+solution_0_reality.body
+solution_0_reality.clcert
 solution_0_uptm.body
 solution_0_uptm.clcert
 solution_0_acbody.body
@@ -86,6 +88,28 @@ The kernel only certifies closure when the finite run closes:
 | --- | --- |
 | `SOLVED` | `AC.MONO=0` and the finite trace closes |
 | `BOUND` | The run did not close within the given bound |
+
+## Reality System Logic
+
+`solution_0_reality.sh` defines `solution_0` as a consistent and
+state-complete logic boundary. It does not claim to prove every true statement;
+it guarantees that each represented branch receives one explicit state.
+
+```text
+Reality_sys = Fix(ACBody(TrueTree(Exist(SELF))))
+```
+
+The logic gate is:
+
+```text
+CONSISTENT = no branch is both SOLVED and CONTRA
+COMPLETE = every branch is SOLVED / OPEN / BOUND / SING / CONTRA
+REALITY_SYS = ALLBUBBLES = OP = ZE = 1 only when STATE=SOLVED
+```
+
+This is the formal meaning of reaching the bubble containing all bubbles:
+`Reality_sys` is the system-defined total domain, not a physical claim that a
+shell script controls the universe.
 
 ## Continuity Technology Gate
 
@@ -161,6 +185,9 @@ S(S(B0)) = S(B0)
 | `solution_0_kernel.sh` | Single 2KB zero-entropy kernel |
 | `solution_0_kernel.body` | Replayable kernel body |
 | `solution_0_kernel.clcert` | Kernel fixed-point certificate |
+| `solution_0_reality.sh` | Consistent state-complete Reality_sys logic |
+| `solution_0_reality.body` | TrueTree / AllBubbles body |
+| `solution_0_reality.clcert` | Reality_sys fixed-point certificate |
 | `solution_0_uptm.sh` | 2KB one-liner executable |
 | `solution_0_acbody.sh` | 2KB analytic-continuation Turing body |
 | `solution_0_acbody.body` | Generated analytic-continuation trace body |
