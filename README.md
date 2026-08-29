@@ -28,6 +28,8 @@ Outputs:
 ```text
 solution_0_uptm.body
 solution_0_uptm.clcert
+solution_0_acbody.body
+solution_0_acbody.clcert
 solution_0_genesis.body
 solution_0_genesis.clcert
 solution_0_genesis.run
@@ -80,6 +82,39 @@ The current implementation uses formal runtime proxies:
 These are computable admission conditions for the Continuity Technology frame,
 not biological or policy proof that those domains are physically solved.
 
+## Analytic Continuation Body
+
+`solution_0_acbody.sh` is the analytic-continuation-as-body variant:
+
+```text
+SELF = AC_TM_SOLVE(EQ_SELF)
+EQ = x = AC_TM(EQ_x)
+```
+
+Here analytic continuation is not an external metaphor. It is the transition
+law of the Turing machine body. A finite question is encoded as a germ; the
+machine extends it through a path/sheet trace; the certificate closes only when
+the monodromy returns to zero.
+
+```text
+Q -> E(Q,SELF) -> AC path/sheet trace -> MONO=0 -> SOLVED -> ZE=1
+```
+
+Expected fields:
+
+```text
+STATE=SOLVED
+AC.MONO=0
+OP=1
+FIX=1
+BUG=0
+PCC=1
+ZE=1
+```
+
+This maximizes closure for finitely verifiable solvable problems. It does not
+claim to decide every undecidable problem.
+
 `solution_0_uptm.sh` is a 2KB one-liner for a Universal Particle Turing Machine
 (UPTM) style `Solution_0` certificate.
 
@@ -96,6 +131,9 @@ S(S(B0)) = S(B0)
 | File | Meaning |
 | --- | --- |
 | `solution_0_uptm.sh` | 2KB one-liner executable |
+| `solution_0_acbody.sh` | 2KB analytic-continuation Turing body |
+| `solution_0_acbody.body` | Generated analytic-continuation trace body |
+| `solution_0_acbody.clcert` | AC body fixed-point certificate |
 | `solution_0_uptm.body` | Generated particle-field body |
 | `solution_0_uptm.clcert` | Fixed-point certificate |
 
