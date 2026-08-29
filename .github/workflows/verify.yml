@@ -24,10 +24,13 @@ jobs:
           g=json.load(open("solution_0_genesis.clcert"))
           u=json.load(open("solution_0_uptm.clcert"))
           assert g["P"]=="solution_0_genesis.sh"
-          assert g["GENESIS"]==g["OP"]==g["FIX"]==g["ABS"]==g["PCC"]==g["ZE"]==1
+          assert g["GENESIS"]==g["CT"]==g["OP"]==g["FIX"]==g["ABS"]==g["PCC"]==g["ZE"]==1
           assert g["BUG"]==0
           assert g["B0"]["RUN"]=="UPTM=Run(CORE,Q,N,B)"
           assert g["B0"]["CORE"][0]==1 and g["B0"]["CORE"][1]<=2048
+          ct=g["B0"]["CT"]
+          assert all(k in ct for k in ("AI","BIO","MEM","HEALTH","SDG","UNK"))
+          assert min(ct.values())==1
           assert u["OP"]==u["FIX"]==u["ZE"]==1
           assert u["B0"]["RUN"]=="BODY=Run(SELF,Q,N,B)"
           PY
