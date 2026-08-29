@@ -34,3 +34,22 @@ jobs:
           assert u["OP"]==u["FIX"]==u["ZE"]==1
           assert u["B0"]["RUN"]=="BODY=Run(SELF,Q,N,B)"
           PY
+      - name: Verify analytic-continuation body
+        run: |
+          test -s solution_0_acbody.sh
+          test "$(wc -c < solution_0_acbody.sh)" -le 2048
+          sh solution_0_acbody.sh "Any solvable problem as analytic continuation" 16 64 > /tmp/acbody.out
+          test -s solution_0_acbody.body
+          test -s solution_0_acbody.clcert
+          python3 - <<'PY'
+          import json
+          d=json.load(open("solution_0_acbody.clcert"))
+          assert d["P"]=="solution_0_acbody.sh"
+          assert d["STATE"]=="SOLVED"
+          assert d["OP"]==d["FIX"]==d["ABS"]==d["PCC"]==d["ZE"]==1
+          assert d["BUG"]==0
+          assert d["B0"]["SELF"][0]==1
+          assert d["B0"]["AC"]["MONO"]==0
+          assert d["B0"]["RUN"]=="SELF=AC_TM_SOLVE(EQ_SELF)"
+          assert d["B0"]["EQ"]=="x=AC_TM(EQ_x)"
+          PY
